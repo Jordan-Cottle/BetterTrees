@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 
 public class LinkedBlock implements Comparable<LinkedBlock>{
 
+    private static final int MAX_DEPTH = 5;
     private Block source;
     private LinkedBlock parent = null;
     private Collection<Material> linkTo;
@@ -41,7 +42,31 @@ public class LinkedBlock implements Comparable<LinkedBlock>{
         range = 1;
         linkTo = EnumSet.of(source.getType());
         neighbors = new ArrayList<LinkedBlock>();
-        addNeighbors();
+
+        if(depth < MAX_DEPTH){
+            addNeighbors();
+        }
+    }
+
+    public void clear(){
+        this.parent = null;
+        for(LinkedBlock neighbor: this.neighbors){
+            neighbor.clear();
+        }
+
+        this.neighbors = null;
+    }
+
+    public boolean equals(Object o){
+        if(o instanceof Block){
+            Block other = (Block) o;
+            return this.source.getLocation().equals(other.getLocation());
+        }else if (o instanceof LinkedBlock){
+            LinkedBlock other = (LinkedBlock) o;
+            return this.source.getLocation().equals(other.source.getLocation());
+        }
+
+        return false;
     }
 
     public int compareTo(LinkedBlock other){
@@ -103,13 +128,14 @@ public class LinkedBlock implements Comparable<LinkedBlock>{
 
         LinkedBlock neighbor = new LinkedBlock(other, this, this.seen);
         neighbors.add(neighbor);
+        System.out.println("New neightbor added!");
         return true;
     }
 
     private void addNeighbors(){
-        for(int x = -range; x < range; x++){
-            for(int y = -range; y < range; y++){
-                for(int z = -range; z < range; z++){
+        for(int x = -range; x <= range; x++){
+            for(int y = -range; y <= range; y++){
+                for(int z = -range; z <= range; z++){
                     Block check = source.getRelative(x, y, z);
                     if(linkableTo(check)){
                         linkTo(check);
