@@ -11,8 +11,16 @@ public class TreeTracker {
         treeRoot = new LinkedBlock(startBlock);
     }
 
+    public void clear(){
+        this.treeRoot.clear();
+    }
+
     public void transform(Material to){
         transform(treeRoot, to);
+    }
+
+    public boolean rootEquals(Block block){
+        return treeRoot.equals(block);
     }
 
     private void transform(LinkedBlock treeNode, Material to){
@@ -21,7 +29,6 @@ public class TreeTracker {
         if(to.equals(Material.AIR)){
             curr.breakNaturally(new ItemStack(Material.DIAMOND_AXE));
         }else{
-            
             curr.setType(to);
         }
 
