@@ -1,4 +1,5 @@
 name: better-trees
-version: "1.0-SNAPSHOT"
+version: "1.0"
 author: Jordan Cottle
 main: cottle.jordan.bettertrees.Main
+api-version: 1.15
